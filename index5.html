@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT - PPIM Pondok Pesantren Islam Al Mukmin Ngruki</title>
+    <style>
+        :root {
+            --primary-color: #064e3b; /* Hijau Tua Ngruki / Islami */
+            --secondary-color: #059669; /* Hijau Emerald Modern */
+            --accent-color: #d97706; /* Emas / Amber untuk Aksen */
+            --dark-color: #1f2937;
+            --light-bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        /* Pesantren Header Bar */
+        .top-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .top-bar h2 {
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .top-bar p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        /* Screen States */
+        .hide { display: none !important; }
+
+        /* Login Screen */
+        .login-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Quiz Header Info */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0fdf4;
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px 20px;
+            border-radius: 4px 8px 8px 4px;
+            margin-bottom: 25px;
+        }
+        .santri-meta h4 { color: var(--primary-color); }
+        .santri-meta p { font-size: 13px; color: #6b7280; }
+        
+        .timer-badge {
+            background-color: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(239,68,68,0.3);
+        }
+
+        /* Question Layout */
+        .question-box {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #111827;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .option-card {
+            background: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-card:hover {
+            border-color: var(--secondary-color);
+            background: #f0fdf4;
+        }
+
+        .option-card.active {
+            border-color: var(--primary-color);
+            background: #ecfdf5;
+            font-weight: 600;
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #4b5563;
+            flex-shrink: 0;
+        }
+
+        .option-card.active .option-letter {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Buttons & Footer */
+        .nav-footer {
+            margin-top: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-accent { background-color: var(--accent-color); color: white; }
+        .btn-secondary { background-color: #6b7280; color: white; }
+        .btn-success { background-color: var(--secondary-color); color: white; }
+
+        /* Result & Score Circle */
+        .score-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(var(--secondary-color) var(--percentage, 0%), #e5e7eb 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            position: relative;
+        }
+        .score-circle::before {
+            content: "";
+            position: absolute;
+            width: 136px;
+            height: 136px;
+            background: white;
+            border-radius: 50%;
+        }
+        .score-text {
+            position: relative;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        /* Review/Pembahasan Section */
+        .review-section {
+            margin-top: 40px;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 30px;
+        }
+        .review-item {
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9fafb;
+            margin-bottom: 20px;
+            border-left: 4px solid #d1d5db;
+        }
+        .review-item.correct { border-left-color: #10b981; background: #f0fdf4; }
+        .review-item.wrong { border-left-color: #ef4444; background: #fef2f2; }
+        
+        .review-q { font-weight: 600; margin-bottom: 10px; }
+        .review-ans { font-size: 14px; margin-bottom: 5px; }
+        .explanation-box {
+            margin-top: 10px;
+            padding: 12px;
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bar Atas Identitas Pondok -->
+    <div class="top-bar">
+        <h2>SOAL LATIHAN ONLINE - ELEMEN DASAR WEB (HTML & CSS)</h2>
+        <p>PPIM PONDOK PESANTREN ISLAM AL MUKMIN NGRUKI</p>
+    </div>
+
+    <div class="main-container">
+
+        <!-- 1. HALAMAN LOGIN IDENTITAS -->
+        <div id="login-screen" class="card">
+            <h3 class="login-title">Registrasi Ujian Mandiri Santri</h3>
+            <div class="form-group">
+                <label for="student-name">Nama Lengkap Santri</label>
+                <input type="text" id="student-name" class="form-control" placeholder="Masukkan nama lengkap Anda...">
+            </div>
+            <div class="form-group">
+                <label for="student-class">Kelas (PPIM)</label>
+                <select id="student-class" class="form-control">
+                    <option value="">-- Pilih Kelas --</option>
+                    <option value="6 PPIM A">6 PPIM A</option>
+                    <option value="6 PPIM B">6 PPIM B</option>
+                    <option value="6 PPIM C">6 PPIM C</option>
+                    <option value="6 PPIM D">6 PPIM D</option>
+                </select>
+            </div>
+            <div style="text-align: right; margin-top: 25px;">
+                <button class="btn btn-primary" onclick="startExam()">Mulai Mengerjakan Soal</button>
+            </div>
+        </div>
+
+        <!-- 2. HALAMAN UTAMA UJIAN / CBT -->
+        <div id="quiz-screen" class="card hide">
+            <div class="quiz-header">
+                <div class="santri-meta">
+                    <h4 id="display-name">Nama Santri</h4>
+                    <p id="display-class">Kelas</p>
+                </div>
+                <div class="timer-badge" id="timer-display">Sisa Waktu: 60:00</div>
+            </div>
+
+            <div id="progress-text" style="font-size: 14px; color: #6b7280; font-weight:600; margin-bottom:10px;">Soal 1 dari 50</div>
+            
+            <div class="question-box" id="question-text">
+                Loading Pertanyaan...
+            </div>
+
+            <div class="options-grid" id="options-box">
+                <!-- Diisi otomatis oleh JavaScript -->
+            </div>
+
+            <div class="nav-footer">
+                <button class="btn btn-secondary" id="btn-back" onclick="navigate(-1)">Sebelumnya</button>
+// DATA LENGKAP 50 SOAL BESERTA KUNCI & PEMBAHASAN SINKRONISASI
+const dataset = [
+{ q: "Kepanjangan dari HTML adalah...", o: ["HyperText Machine Language", "HyperText Markup Language", "HyperLink Markup Language", "HomeTool Markup Language", "HyperText Makeup Language"], c: 1, e: "HTML merupakan kependekan dari HyperText Markup Language, bahasa standar untuk membuat halaman web." },
+{ q: "Dalam pembuatan website, jika diibaratkan sebagai manusia, peran HTML berfungsi sebagai...", o: ["Pakaian", "Kulit", "Kerangka atau tulang", "Otak", "Otot"], c: 2, e: "HTML membentuk struktur dasar atau fondasi/kerangka sebuah website sebelum dihias." },
+{ q: "Tag HTML yang digunakan untuk membuat judul paling besar atau utama adalah...", o: ["", "", "", "", ""], c: 3, e: "Tag digunakan untuk Heading tingkatan pertama (paling besar/utama)." },
+{ q: "Untuk memulai membuat dokumen HTML standar yang mencakup keseluruhan elemen, tag akar (root) yang digunakan adalah...", o: ["", "", "", "", ""], c: 0, e: "Tag membungkus seluruh konten kode dalam dokumen web." },
+{ q: "Bagian dalam dokumen HTML yang memuat informasi meta, judul halaman, dan tautan ke file eksternal berada di dalam tag...", o: ["", "", "", "", ""], c: 1, e: "Tag berisi informasi mesin/meta hulu web yang tidak nampak langsung di halaman utama browser." },
+{ q: "Tag yang digunakan untuk membuat paragraf dalam dokumen HTML adalah...", o: ["
+", "", "", "", ""], c: 2, e: "Tag merepresentasikan elemen paragraph." },
+{ q: "Kepanjangan dari WWW dalam dunia internet adalah...", o: ["World Wide Web", "Wide World Web", "Web World Wide", "World Web Wide", "Web Wide World"], c: 0, e: "WWW singkatan resmi dari World Wide Web." },
+{ q: "Tag HTML apa yang digunakan untuk membuat garis horizontal (horizontal rule)?", o: ["", "", "", "", ""], c: 2, e: " berarti Horizontal Rule untuk menarik garis lurus mendatar." },
+{ q: "Untuk membuat teks menjadi tebal (bold) secara semantik modern, tag yang disarankan adalah...", o: ["", "", "", "", ""], c: 2, e: "Secara semantik modern, dipakai untuk teks tebal dengan penekanan penting dibanding sekadar visual ." },
+{ q: "Tag yang digunakan untuk membuat miring (italic) suatu teks adalah...", o: ["", "", "", " atau ", ""], c: 3, e: "Tag (italic) atau (emphasized) menghasilkan format teks miring." },
+{ q: "Atribut apa yang digunakan di dalam tag untuk menentukan alamat tujuan tautan (link)?", o: ["src", "href", "link", "target", "to"], c: 1, e: "href (Hypertext Reference) menentukan URL tujuan dari anchor link." },
+{ q: "Tag HTML yang digunakan untuk menampilkan gambar pada halaman web adalah...", o: ["", "", "", "", ""], c: 2, e: "Pemasangan berkas gambar menggunakan tag tunggal ." },
+{ q: "Atribut wajib pada tag yang berfungsi untuk menampilkan deskripsi alternatif jika gambar gagal dimuat adalah...", o: ["title", "alt", "longdesc", "info", "desc"], c: 1, e: "alt (alternative text) memuat teks pengganti jika file visual gambar rusak/gagal dibuka." },
+{ q: "Bagaimana cara menuliskan komentar yang benar di dalam kode HTML?", o: ["// Ini komentar", "/* Ini komentar /", "", "' Ini komentar", "# Ini komentar"], c: 2, e: "Komentar di HTML dibuka dengan ." },
+{ q: "Tag yang digunakan untuk membuat daftar berurutan (numbered list/ordered list) adalah...", o: ["", "", "", "", ""], c: 1, e: " singkatan dari Ordered List (daftar angka/huruf berurutan)." },
+{ q: "Tag yang digunakan untuk membuat daftar tidak berurutan (bulleted list/unordered list) adalah...", o: ["", "", "", "", ""], c: 2, e: " singkatan dari Unordered List (daftar poin simbol/bullet)." },
+{ q: "Setiap elemen item di dalam tag atau harus menggunakan tag...", o: ["", "", "", "", ""], c: 2, e: " singkatan dari List Item sebagai isi poin daftar." },
+{ q: "Tag yang digunakan untuk membuat baris baru (line break) di dalam teks HTML adalah...", o: ["", "
+", "", "", ""], c: 1, e: "
+digunakan untuk berpindah ke baris baru tanpa jeda paragraf." },
+{ q: "Untuk membuat tabel dalam HTML, tag utama pembungkus tabel adalah...", o: ["", "", "", "", ""], c: 2, e: "Elemen tabel dibentuk dengan tag pembuka/penutup ." },
+{ q: "Di dalam tabel HTML, tag apa yang digunakan untuk mendefinisikan baris tabel (table row)?", o: ["", "", "", "", ""], c: 2, e: " singkatan dari Table Row." },
+{ q: "Tag yang digunakan untuk membuat sel data biasa di dalam baris tabel adalah...", o: ["", "", "", "", ""], c: 1, e: " singkatan dari Table Data untuk sel baris isi." },
+{ q: "Manakah tag di bawah ini yang digunakan untuk membuat elemen formulir (form) tempat pengguna memasukkan teks atau data?", o: ["", "", "", "", ""], c: 0, e: "Tag menerima berbagai isian isian interaktif user." },
+{ q: "Atribut type pada tag yang digunakan untuk membuat kotak sandi (password) yang disembunyikan karakternya adalah...", o: ["type='text'", "type='pwd'", "type='password'", "type='secure'", "type='hidden'"], c: 2, e: "Menggunakan type='password' membuat karakter ter-masking bulat/bintang." },
+{ q: "Tag yang digunakan untuk membuat dropdown list atau pilihan menu pilihan ke bawah pada form adalah...", o: ["", "", "", "", ""], c: 1, e: "Menu dropdown memanfaatkan tag yang membungkus kumpulan ." },
+{ q: "Perangkat lunak atau aplikasi yang digunakan untuk menuliskan kode program pembuatan web dinamakan...", o: ["Web Browser", "Code Editor", "Web Server", "Compiler", "Database Engine"], c: 1, e: "Aplikasi penulisan baris kode program disebut Code Editor (seperti VS Code, Notepad++)." },
+{ q: "Kepanjangan dari CSS adalah...", o: ["Cascading Style Sheets", "Creative Style System", "Computer Style Sheets", "Cascading Sheet Style", "Colorful Style Sheets"], c: 0, e: "CSS memiliki kepanjangan resmi Cascading Style Sheets." },
+{ q: "Jika HTML diibaratkan sebagai kerangka rumah, maka fungsi CSS adalah sebagai...", o: ["Tanah pondasi rumah", "Cat, furnitur, dan dekorasi rumah", "Pemilik rumah", "Tukang bangunan", "Atap rumah utama"], c: 1, e: "CSS bertanggung jawab penuh menghias visual kosmetik web agar cantik." },
+{ q: "Di manakah penulisan Internal CSS diletakkan di dalam struktur dokumen HTML?", o: ["Di dalam tag ", "Di dalam tag menggunakan tag ", "Di luar tag ", "Di dalam tag ", "Di dalam tag "], c: 1, e: "Internal CSS ditaruh dalam blok elemen di area ." },
+{ q: "Metode penulisan CSS yang disematkan secara langsung pada atribut suatu elemen HTML disebut...", o: ["External CSS", "Internal CSS", "Inline CSS", "Global CSS", "Local CSS"], c: 2, e: "Penulisan langsung di baris kode tag lewat atribut style disebut Inline CSS." },
+{ q: "Ekstensi file yang digunakan untuk menyimpan dokumen file Cascading Style Sheets eksternal adalah...", o: [".html", ".css", ".style", ".stylesheet", ".cs"], c: 1, e: "Berkas CSS murni wajib disimpan dengan akhiran berkas .css." },
+{ q: "Bagaimana cara menghubungkan file CSS eksternal dengan dokumen HTML?", o: ["Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag "], c: 1, e: "Penghubung file luar menggunakan tag " },
+{ q: "Perhatikan penulisan berikut: p { color: red; }. Bagian p dinamakan sebagai...", o: ["Property", "Value", "Selector", "Declaration", "Argument"], c: 2, e: "p menunjuk target elemen mana yang akan diubah, disebut Selector." },
+{ q: "Dalam sintaks color: blue;, kata color bertindak sebagai...", o: ["Selector", "Property", "Value", "Tag", "Class"], c: 1, e: "Atribut modifikasi gaya (seperti color, font-size) dinamai Property." },
+{ q: "Properti CSS yang digunakan untuk mengubah warna teks suatu elemen adalah...", o: ["text-color", "font-color", "color", "background-color", "forecolor"], c: 2, e: "Properti murni pewarnaan font teks di CSS adalah color." },
+{ q: "Properti CSS yang digunakan untuk mengubah jenis huruf atau font adalah...", o: ["font-family", "text-style", "font-type", "typeface", "font-weight"], c: 0, e: "font-family mengatur pergantian jenis tipe font tulisan." },
+{ q: "Simbol atau karakter apa yang digunakan dalam penulisan selector CSS untuk menandai sebuah ID?", o: ["Titik (.)", "Tanda pagar atau hashtag (#)", "Bintang ()", "Ampersand (&)", "Dollar ($)"], c: 1, e: "Selector ID diawali lambang tagar/pagar (#)." },
+{ q: "Simbol atau karakter apa yang digunakan dalam penulisan selector CSS untuk menandai sebuah Class?", o: ["Titik (.)", "Tanda pagar (#)", "At (@)", "Persen (%)", "Tanda seru (!)"], c: 0, e: "Selector Class diwakili simbol titik (.) di awal penamaannya." },
+{ q: "Properti CSS yang digunakan untuk mengubah ukuran teks adalah...", o: ["text-size", "font-size", "size", "text-scale", "font-dimension"], c: 1, e: "font-size mendikte ukuran besar/kecil karakter tulisan." },
+{ q: "Properti CSS yang berfungsi untuk memberi warna latar belakang (background) pada elemen adalah...", o: ["color-background", "bg-color", "background-color", "back-color", "canvas-color"], c: 2, e: "background-color dipakai memberikan pewarnaan bidang latar belakang." },
+{ q: "Untuk membuat teks menjadi rata tengah (center) menggunakan CSS, properti yang dipakai adalah...", o: ["align: center;", "text-align: center;", "position: center;", "font-align: center;", "vertical-align: center;"], c: 1, e: "Perataan text horizontal tengah diatur via text-align: center;." },
+{ q: "Properti CSS yang digunakan untuk mengatur jarak di luar (margin) dari sebuah elemen adalah...", o: ["padding", "spacing", "margin", "border-space", "offset"], c: 2, e: "Jarak batas luar elemen dengan objek sekelilingnya diatur lewat properti margin." },
+{ q: "Properti CSS yang digunakan untuk mengatur jarak di dalam (antara konten dan garis tepi/border) sebuah elemen adalah...", o: ["margin", "padding", "border-inset", "inner-space", "container-gap"], c: 1, e: "Padding memberikan ruang/jarak internal bantalan dalam kotak elemen." },
+{ q: "Bagaimana cara menuliskan komentar yang benar di dalam file atau kode CSS?", o: ["", "// Komentar CSS", "/* Komentar CSS /", "' Komentar CSS", "# Komentar CSS"], c: 2, e: "Sintaks komentar CSS dibuka menggunakan / dan diakhiri */." },
+{ q: "Properti CSS mana yang digunakan untuk menebalkan teks?", o: ["font-style", "text-weight", "font-weight", "bold-property", "text-bold"], c: 2, e: "Tingkat ketebalan huruf dikelola lewat font-weight." },
+{ q: "Nilai (value) apa yang biasa diberikan pada properti font-weight untuk membuat teks menjadi tebal?", o: ["italic", "bold", "thicker", "bolder", "Jawaban B dan D benar"], c: 4, e: "Baik nilai 'bold' maupun 'bolder' valid dipakai menginstruksikan ketebalan aksara." },
+{ q: "Properti CSS yang digunakan untuk memberikan garis tepi (border) pada elemen memiliki format ringkas, salah satunya seperti border: 1px solid black;. Apa arti dari 1px di sana?", o: ["Jenis garis tepi", "Warna garis tepi", "Ketebalan atau lebar garis tepi", "Panjang garis tepi", "Transparansi garis tepi"], c: 2, e: "Satuan pixel (1px) di penulisan border menentukan tebal tipisnya garis." },
+{ q: "Properti CSS yang digunakan untuk membuat sudut elemen menjadi melengkung adalah...", o: ["corner-radius", "border-radius", "curve-edge", "edge-radius", "radius-style"], c: 1, e: "border-radius memotong tajamnya sudut kotak menjadi melengkung/halus." },
+{ q: "Nilai properti display pada CSS yang membuat suatu elemen ditampilkan memenuhi satu baris penuh dan elemen setelahnya turun ke baris baru adalah...", o: ["inline", "block", "flex", "none", "grid"], c: 1, e: "Elemen block secara natural memesan seluruh baris menyamping untuk dirinya sendiri." },
+{ q: "Jika kita ingin menyembunyikan sebuah elemen HTML agar tidak tampil sama sekali di halaman web menggunakan CSS, nilai properti display yang digunakan adalah...", o: ["hidden", "invisible", "none", "off", "zero"], c: 2, e: "display: none; akan menghilangkan elemen dari alur tata letak halaman secara total." },
+{ q: "Manakah urutan prioritas (cascading order) kekuatan aturan CSS yang benar dari yang paling tinggi jika terjadi konflik penulisan?", o: ["External CSS > Internal CSS > Inline CSS", "Internal CSS > Inline CSS > External CSS", "Inline CSS > Internal CSS > External CSS", "External CSS > Inline CSS > Internal CSS", "Semuanya memiliki derajat kekuatan yang sama rata"], c: 2, e: "Inline CSS (atribut objek langsung) memenangkan prioritas tertinggi, disusul Internal lalu berkas luar (External)." }
+];
+let indexAktif = 0;
+let jawabanSantri = new Array(dataset.length).fill(null);
+let sisaWaktu = 60 * 60; // Waktu Pengerjaan 60 Menit
+let intervalTimer;
+let namaSantri = "";
+let kelasSantri = "";
+function startExam() {
+namaSantri = document.getElementById("student-name").value.trim();
+kelasSantri = document.getElementById("student-class").value;
+if (!namaSantri || !kelasSantri) {
+alert("Harap isi Nama Lengkap dan pilih Kelas terlebih dahulu!");
+return;
+}
+// Ganti Screen Tampilan
+document.getElementById("login-screen").classList.add("hide");
+document.getElementById("quiz-screen").classList.remove("hide");
+// Pasang Informasi Santri
+document.getElementById("display-name").innerText = namaSantri;
+document.getElementById("display-class").innerText = "Kelas: " + kelasSantri;
+// Jalankan Kuis
+renderQuestion();
+startCountdown();
+}
+function renderQuestion() {
+const currentItem = dataset[indexAktif];
+// Render Teks Soal & Progress
+document.getElementById("progress-text").innerText = Soal ${indexAktif + 1} dari ${dataset.length};
+document.getElementById("question-text").innerText = ${indexAktif + 1}. ${currentItem.q};
+// Render Opsi Jawaban
+const optionsBox = document.getElementById("options-box");
+optionsBox.innerHTML = "";
+const alfabet = ["A", "B", "C", "D", "E"];
+currentItem.o.forEach((opsi, idx) => {
+const optCard = document.createElement("div");
+optCard.className = option-card ${jawabanSantri[indexAktif] === idx ? 'active' : ''};
+optCard.onclick = () => selectAnswer(idx);
+optCard.innerHTML = <div class="option-letter">${alfabet[idx]}</div> <div class="option-text">${escapeHTML(opsi)}</div>;
+optionsBox.appendChild(optCard);
+});
+// Atur Visibilitas Tombol Navigasi
+document.getElementById("btn-back").style.visibility = indexAktif === 0 ? "hidden" : "visible";
+if (indexAktif === dataset.length - 1) {
+document.getElementById("btn-next").style.display = "none";
+document.getElementById("btn-submit-exam").style.display = "block";
+} else {
+document.getElementById("btn-next").style.display = "block";
+document.getElementById("btn-submit-exam").style.display = "none";
+}
+}
+function selectAnswer(indexOpsi) {
+jawabanSantri[indexAktif] = indexOpsi;
+renderQuestion();
+}
+function navigate(arah) {
+indexAktif += arah;
+renderQuestion();
+}
+function startCountdown() {
+intervalTimer = setInterval(() => {
+if (sisaWaktu <= 0) {
+clearInterval(intervalTimer);
+alert("Waktu ujian telah habis!");
+submitExam(true);
+} else {
+sisaWaktu--;
+let m = Math.floor(sisaWaktu / 60);
+let s = sisaWaktu % 60;
+document.getElementById("timer-display").innerText = Sisa Waktu: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')};
+}
+}, 1000);
+}
+function submitExam(isAuto) {
+if (!isAuto) {
+const sisaKosong = jawabanSantri.filter(ans => ans === null).length;
+let pesan = "Apakah Anda yakin ingin menyelesaikan dan mengirim jawaban ujian?";
+if(sisaKosong > 0) {
+pesan = Peringatan: Masih ada ${sisaKosong} soal yang belum dijawab. + pesan;
+}
+if (!confirm(pesan)) return;
+}
+clearInterval(intervalTimer);
+// Hitung Skor Akhir
+let totalBenar = 0;
+dataset.forEach((item, idx) => {
+if (jawabanSantri[idx] === item.c) {
+totalBenar++;
+}
+});
+let nilaiAkhir = Math.round((totalBenar / dataset.length) * 100);
+// Tampilkan Screen Hasil
+document.getElementById("quiz-screen").classList.add("hide");
+document.getElementById("result-screen").classList.remove("hide");
+// Pasang Skor Ringkasan
+document.getElementById("result-meta").innerText = Santri: ${namaSantri} | Kelas: ${kelasSantri};
+document.getElementById("score-val").innerText = nilaiAkhir;
+document.getElementById("score-circle-element").style.setProperty('--percentage', ${nilaiAkhir}%);
+document.getElementById("score-summary").innerText = Menjawab Benar ${totalBenar} dari ${dataset.length} Soal.;
+// Buat Lembar Review Pembahasan Soal
+generateReview();
+}
+function generateReview() {
+const reviewBox = document.getElementById("review-list-box");
+reviewBox.innerHTML = "";
+const alfabet = ["A", "B", "C", "D", "E"];
+dataset.forEach((item, idx) => {
+const statusBenar = jawabanSantri[idx] === item.c;
+const reviewItem = document.createElement("div");
+reviewItem.className = review-item ${statusBenar ? 'correct' : 'wrong'};
+let teksJawabanSantri = jawabanSantri[idx] !== null ? ${alfabet[jawabanSantri[idx]]}. ${item.o[jawabanSantri[idx]]} : "(Tidak Dijawab)";
+let teksKunciBenar = ${alfabet[item.c]}. ${item.o[item.c]};
+reviewItem.innerHTML = <div class="review-q">${idx + 1}. ${item.q}</div> <div class="review-ans" style="color: ${statusBenar ? '#10b981' : '#ef4444'}"> <strong>Jawaban Anda:</strong> ${escapeHTML(teksJawabanSantri)} ${statusBenar ? '✓' : '✗'} </div> ${!statusBenar ?Kunci Jawaban: ${escapeHTML(teksKunciBenar)}: ''} <div class="explanation-box"> <strong>Pembahasan:</strong> ${item.e} </div>;
+reviewBox.appendChild(reviewItem);
+});
+}
+function escapeHTML(str) {
+return str.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """);
+}
+
+
