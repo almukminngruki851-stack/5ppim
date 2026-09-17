@@ -1,489 +1,1174 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBT - PPIM Pondok Pesantren Islam Al Mukmin Ngruki</title>
-    <style>
-        :root {
-            --primary-color: #064e3b; /* Hijau Tua Ngruki / Islami */
-            --secondary-color: #059669; /* Hijau Emerald Modern */
-            --accent-color: #d97706; /* Emas / Amber untuk Aksen */
-            --dark-color: #1f2937;
-            --light-bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    <title>CBT Online - Kelas 5 PPIM | Pondok Pesantren Islam Ngruki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        emeraldTheme: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--light-bg);
-            color: var(--dark-color);
-            line-height: 1.6;
-        }
-
-        /* Pesantren Header Bar */
-        .top-bar {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-            border-bottom: 4px solid var(--accent-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .top-bar h2 {
-            font-size: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .top-bar p {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-top: 2px;
-        }
-
-        .main-container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 35px;
-            margin-bottom: 30px;
-        }
-
-        /* Screen States */
-        .hide { display: none !important; }
-
-        /* Login Screen */
-        .login-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--primary-color);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-        }
-
-        /* Quiz Header Info */
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f0fdf4;
-            border-left: 5px solid var(--secondary-color);
-            padding: 15px 20px;
-            border-radius: 4px 8px 8px 4px;
-            margin-bottom: 25px;
-        }
-        .santri-meta h4 { color: var(--primary-color); }
-        .santri-meta p { font-size: 13px; color: #6b7280; }
-        
-        .timer-badge {
-            background-color: #ef4444;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 2px 4px rgba(239,68,68,0.3);
-        }
-
-        /* Question Layout */
-        .question-box {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #111827;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .option-card {
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 14px 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .option-card:hover {
-            border-color: var(--secondary-color);
-            background: #f0fdf4;
-        }
-
-        .option-card.active {
-            border-color: var(--primary-color);
-            background: #ecfdf5;
-            font-weight: 600;
-        }
-
-        .option-letter {
-            width: 30px;
-            height: 30px;
-            background: #f3f4f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #4b5563;
-            flex-shrink: 0;
-        }
-
-        .option-card.active .option-letter {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        /* Buttons & Footer */
-        .nav-footer {
-            margin-top: 35px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-primary { background-color: var(--primary-color); color: white; }
-        .btn-accent { background-color: var(--accent-color); color: white; }
-        .btn-secondary { background-color: #6b7280; color: white; }
-        .btn-success { background-color: var(--secondary-color); color: white; }
-
-        /* Result & Score Circle */
-        .score-container {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .score-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: conic-gradient(var(--secondary-color) var(--percentage, 0%), #e5e7eb 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto;
-            position: relative;
-        }
-        .score-circle::before {
-            content: "";
-            position: absolute;
-            width: 136px;
-            height: 136px;
-            background: white;
-            border-radius: 50%;
-        }
-        .score-text {
-            position: relative;
-            font-size: 42px;
-            font-weight: 800;
-            color: var(--primary-color);
-        }
-
-        /* Review/Pembahasan Section */
-        .review-section {
-            margin-top: 40px;
-            border-top: 2px solid #e5e7eb;
-            padding-top: 30px;
-        }
-        .review-item {
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9fafb;
-            margin-bottom: 20px;
-            border-left: 4px solid #d1d5db;
-        }
-        .review-item.correct { border-left-color: #10b981; background: #f0fdf4; }
-        .review-item.wrong { border-left-color: #ef4444; background: #fef2f2; }
-        
-        .review-q { font-weight: 600; margin-bottom: 10px; }
-        .review-ans { font-size: 14px; margin-bottom: 5px; }
-        .explanation-box {
-            margin-top: 10px;
-            padding: 12px;
-            background: #fff;
-            border: 1px dashed #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #374151;
-        }
-    </style>
+    </script>
 </head>
-<body>
+<body class="h-full bg-slate-50 font-sans text-slate-800 antialiased">
 
-    <!-- Bar Atas Identitas Pondok -->
-    <div class="top-bar">
-        <h2>SOAL LATIHAN ONLINE - ELEMEN DASAR WEB (HTML & CSS)</h2>
-        <p>PPIM PONDOK PESANTREN ISLAM AL MUKMIN NGRUKI</p>
-    </div>
+    <div id="app" class="min-h-full flex flex-col">
+        
+        <!-- ================= LOGIN SCREEN ================= -->
+        <div id="loginScreen" class="flex-1 flex items-center justify-center p-4">
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden">
+                <!-- Header Banner -->
+                <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 p-6 text-white text-center relative">
+                    <div class="absolute top-3 right-3 bg-emerald-700/50 text-xs px-2.5 py-1 rounded-full font-medium">PPIM Ngruki</div>
+                    <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/20">
+                        <svg class="w-8 h-8 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold">Ujian Komputer (CBT)</h1>
+                    <p class="text-emerald-200 text-sm mt-1">Materi: Desain Layout, Tipografi & InDesign</p>
+                </div>
 
-    <div class="main-container">
+                <!-- Form Login -->
+                <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap Santri</label>
+                        <input type="text" id="studentName" required placeholder="Masukkan nama lengkap Anda..."
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent text-sm">
+                    </div>
 
-        <!-- 1. HALAMAN LOGIN IDENTITAS -->
-        <div id="login-screen" class="card">
-            <h3 class="login-title">Registrasi Ujian Mandiri Santri</h3>
-            <div class="form-group">
-                <label for="student-name">Nama Lengkap Santri</label>
-                <input type="text" id="student-name" class="form-control" placeholder="Masukkan nama lengkap Anda...">
-            </div>
-            <div class="form-group">
-                <label for="student-class">Kelas (PPIM)</label>
-                <select id="student-class" class="form-control">
-                    <option value="">-- Pilih Kelas --</option>
-                    <option value="6 PPIM A">6 PPIM A</option>
-                    <option value="6 PPIM B">6 PPIM B</option>
-                    <option value="6 PPIM C">6 PPIM C</option>
-                    <option value="6 PPIM D">6 PPIM D</option>
-                </select>
-            </div>
-            <div style="text-align: right; margin-top: 25px;">
-                <button class="btn btn-primary" onclick="startExam()">Mulai Mengerjakan Soal</button>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Kelas</label>
+                        <select id="studentClass" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent text-sm bg-white">
+                            <option value="">-- Pilih Kelas PPIM --</option>
+                            <option value="5 A PPIM">5 A PPIM</option>
+                            <option value="5 B PPIM">5 B PPIM</option>
+                            <option value="5 C PPIM">5 C PPIM</option>
+                            <option value="5 D PPIM">5 D PPIM</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit"
+                            class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-emerald-700/20 transition-all duration-200 flex items-center justify-center space-x-2">
+                            <span>Mulai Mengerjakan Ujian</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <!-- 2. HALAMAN UTAMA UJIAN / CBT -->
-        <div id="quiz-screen" class="card hide">
-            <div class="quiz-header">
-                <div class="santri-meta">
-                    <h4 id="display-name">Nama Santri</h4>
-                    <p id="display-class">Kelas</p>
+        <!-- ================= EXAM SCREEN ================= -->
+        <div id="examScreen" class="hidden flex-1 flex flex-col">
+            <!-- Top Navbar -->
+            <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 lg:px-8 py-3 flex items-center justify-between shadow-sm">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center font-bold text-emerald-800">
+                        N
+                    </div>
+                    <div>
+                        <h2 id="displayName" class="font-bold text-sm lg:text-base text-slate-900"></h2>
+                        <p id="displayClass" class="text-xs text-slate-500 font-medium"></p>
+                    </div>
                 </div>
-                <div class="timer-badge" id="timer-display">Sisa Waktu: 60:00</div>
+
+                <!-- Timer & Finish Button -->
+                <div class="flex items-center space-x-4">
+                    <div class="bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-amber-800 font-bold text-sm">
+                        <svg class="w-4 h-4 text-amber-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="timerDisplay">60:00</span>
+                    </div>
+
+                    <button onclick="confirmSubmit()"
+                        class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs lg:text-sm font-semibold px-4 py-2 rounded-xl shadow transition">
+                        Selesai & Kumpulkan
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content Grid -->
+            <div class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                
+                <!-- Left/Center Question Area -->
+                <div class="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between min-h-[480px]">
+                    <div>
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                            <span id="questionCounter" class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+                                Soal No. 1 dari 60
+                            </span>
+                            <span id="answerStatusBadge" class="text-xs font-medium text-slate-400">Belum dijawab</span>
+                        </div>
+
+                        <!-- Question Text -->
+                        <h3 id="questionText" class="text-base lg:text-lg font-semibold text-slate-900 mb-6 leading-relaxed">
+                            <!-- Pertanyaan dimuat via JS -->
+                        </h3>
+
+                        <!-- Options List -->
+                        <div id="optionsContainer" class="space-y-3">
+                            <!-- Pilihan opsi dimuat via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer inside Card -->
+                    <div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100">
+                        <button onclick="prevQuestion()" id="prevBtn"
+                            class="px-4 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-sm font-medium text-slate-600 transition flex items-center space-x-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            <span>Sebelumnya</span>
+                        </button>
+
+                        <button onclick="nextQuestion()" id="nextBtn"
+                            class="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-sm font-semibold transition flex items-center space-x-1 shadow-sm">
+                            <span>Selanjutnya</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Question Palette -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 lg:sticky lg:top-24">
+                    <h4 class="font-bold text-slate-800 text-sm mb-3">Nomor Soal</h4>
+                    <div class="flex items-center space-x-4 mb-4 text-xs text-slate-500">
+                        <div class="flex items-center space-x-1.5">
+                            <div class="w-3 h-3 bg-emerald-600 rounded-sm"></div>
+                            <span>Terjawab</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <div class="w-3 h-3 bg-slate-100 border border-slate-300 rounded-sm"></div>
+                            <span>Belum</span>
+                        </div>
+                    </div>
+
+                    <!-- Palette Grid -->
+                    <div id="paletteGrid" class="grid grid-cols-5 gap-2 max-h-[360px] overflow-y-auto pr-1">
+                        <!-- Kotak nomor soal dimuat dinamis -->
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div id="progress-text" style="font-size: 14px; color: #6b7280; font-weight:600; margin-bottom:10px;">Soal 1 dari 50</div>
-            
-            <div class="question-box" id="question-text">
-                Loading Pertanyaan...
+        <!-- ================= RESULT SCREEN ================= -->
+        <div id="resultScreen" class="hidden flex-1 max-w-4xl w-full mx-auto p-4 lg:p-8 my-auto">
+            <div class="bg-white rounded-3xl shadow-xl border border-emerald-100 overflow-hidden">
+                <!-- Result Banner -->
+                <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 p-8 text-white text-center">
+                    <div class="w-20 h-20 bg-emerald-700/60 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
+                        <svg class="w-10 h-10 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold">Ujian Telah Selesai</h2>
+                    <p class="text-emerald-200 text-sm mt-1">Alhamdulillah, lembar jawaban Anda telah berhasil direkap.</p>
+                </div>
+
+                <!-- Score Board -->
+                <div class="p-6 lg:p-8 border-b border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                        <span class="text-xs uppercase font-bold text-emerald-700 block mb-1">Nama / Kelas</span>
+                        <span id="resStudentInfo" class="font-bold text-slate-800 text-lg">-</span>
+                    </div>
+                    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                        <span class="text-xs uppercase font-bold text-emerald-700 block mb-1">Nilai Akhir</span>
+                        <span id="resScore" class="font-extrabold text-emerald-800 text-3xl">0</span>
+                    </div>
+                    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                        <span class="text-xs uppercase font-bold text-emerald-700 block mb-1">Benar / Total</span>
+                        <span id="resStats" class="font-bold text-slate-800 text-lg">0 / 60</span>
+                    </div>
+                </div>
+
+                <!-- Answer Key & Explanations Accordion/List -->
+                <div class="p-6 lg:p-8 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900">Kunci Jawaban & Pembahasan</h3>
+                        <span class="text-xs text-slate-500 font-medium">Pondok Pesantren Islam Ngruki</span>
+                    </div>
+                    
+                    <div id="reviewContainer" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                        <!-- Review list dimuat via JS -->
+                    </div>
+                </div>
+
+                <!-- Footer action -->
+                <div class="bg-slate-50 p-6 text-center border-t border-slate-200">
+                    <button onclick="location.reload()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition">
+                        Keluar / Selesai
+                    </button>
+                </div>
             </div>
+        </div>
 
-            <div class="options-grid" id="options-box">
-                <!-- Diisi otomatis oleh JavaScript -->
+        <!-- Custom Modal Confirm Submit -->
+        <div id="confirmModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center">
+                <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-200">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-lg text-slate-900 mb-2">Konfirmasi Pengumpulan</h3>
+                <p class="text-sm text-slate-600 mb-6">Apakah Anda yakin ingin menyelesaikan ujian dan mengumpulkan lembar jawaban? Pastikan semua soal telah terjawab.</p>
+                <div class="flex space-x-3">
+                    <button onclick="closeConfirmModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-sm transition">
+                        Periksa Kembali
+                    </button>
+                    <button onclick="submitExam()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">
+                        Ya, Kumpulkan
+                    </button>
+                </div>
             </div>
+        </div>
 
-            <div class="nav-footer">
-                <button class="btn btn-secondary" id="btn-back" onclick="navigate(-1)">Sebelumnya</button>
-// DATA LENGKAP 50 SOAL BESERTA KUNCI & PEMBAHASAN SINKRONISASI
-const dataset = [
-{ q: "Kepanjangan dari HTML adalah...", o: ["HyperText Machine Language", "HyperText Markup Language", "HyperLink Markup Language", "HomeTool Markup Language", "HyperText Makeup Language"], c: 1, e: "HTML merupakan kependekan dari HyperText Markup Language, bahasa standar untuk membuat halaman web." },
-{ q: "Dalam pembuatan website, jika diibaratkan sebagai manusia, peran HTML berfungsi sebagai...", o: ["Pakaian", "Kulit", "Kerangka atau tulang", "Otak", "Otot"], c: 2, e: "HTML membentuk struktur dasar atau fondasi/kerangka sebuah website sebelum dihias." },
-{ q: "Tag HTML yang digunakan untuk membuat judul paling besar atau utama adalah...", o: ["", "", "", "", ""], c: 3, e: "Tag digunakan untuk Heading tingkatan pertama (paling besar/utama)." },
-{ q: "Untuk memulai membuat dokumen HTML standar yang mencakup keseluruhan elemen, tag akar (root) yang digunakan adalah...", o: ["", "", "", "", ""], c: 0, e: "Tag membungkus seluruh konten kode dalam dokumen web." },
-{ q: "Bagian dalam dokumen HTML yang memuat informasi meta, judul halaman, dan tautan ke file eksternal berada di dalam tag...", o: ["", "", "", "", ""], c: 1, e: "Tag berisi informasi mesin/meta hulu web yang tidak nampak langsung di halaman utama browser." },
-{ q: "Tag yang digunakan untuk membuat paragraf dalam dokumen HTML adalah...", o: ["
-", "", "", "", ""], c: 2, e: "Tag merepresentasikan elemen paragraph." },
-{ q: "Kepanjangan dari WWW dalam dunia internet adalah...", o: ["World Wide Web", "Wide World Web", "Web World Wide", "World Web Wide", "Web Wide World"], c: 0, e: "WWW singkatan resmi dari World Wide Web." },
-{ q: "Tag HTML apa yang digunakan untuk membuat garis horizontal (horizontal rule)?", o: ["", "", "", "", ""], c: 2, e: " berarti Horizontal Rule untuk menarik garis lurus mendatar." },
-{ q: "Untuk membuat teks menjadi tebal (bold) secara semantik modern, tag yang disarankan adalah...", o: ["", "", "", "", ""], c: 2, e: "Secara semantik modern, dipakai untuk teks tebal dengan penekanan penting dibanding sekadar visual ." },
-{ q: "Tag yang digunakan untuk membuat miring (italic) suatu teks adalah...", o: ["", "", "", " atau ", ""], c: 3, e: "Tag (italic) atau (emphasized) menghasilkan format teks miring." },
-{ q: "Atribut apa yang digunakan di dalam tag untuk menentukan alamat tujuan tautan (link)?", o: ["src", "href", "link", "target", "to"], c: 1, e: "href (Hypertext Reference) menentukan URL tujuan dari anchor link." },
-{ q: "Tag HTML yang digunakan untuk menampilkan gambar pada halaman web adalah...", o: ["", "", "", "", ""], c: 2, e: "Pemasangan berkas gambar menggunakan tag tunggal ." },
-{ q: "Atribut wajib pada tag yang berfungsi untuk menampilkan deskripsi alternatif jika gambar gagal dimuat adalah...", o: ["title", "alt", "longdesc", "info", "desc"], c: 1, e: "alt (alternative text) memuat teks pengganti jika file visual gambar rusak/gagal dibuka." },
-{ q: "Bagaimana cara menuliskan komentar yang benar di dalam kode HTML?", o: ["// Ini komentar", "/* Ini komentar /", "", "' Ini komentar", "# Ini komentar"], c: 2, e: "Komentar di HTML dibuka dengan ." },
-{ q: "Tag yang digunakan untuk membuat daftar berurutan (numbered list/ordered list) adalah...", o: ["", "", "", "", ""], c: 1, e: " singkatan dari Ordered List (daftar angka/huruf berurutan)." },
-{ q: "Tag yang digunakan untuk membuat daftar tidak berurutan (bulleted list/unordered list) adalah...", o: ["", "", "", "", ""], c: 2, e: " singkatan dari Unordered List (daftar poin simbol/bullet)." },
-{ q: "Setiap elemen item di dalam tag atau harus menggunakan tag...", o: ["", "", "", "", ""], c: 2, e: " singkatan dari List Item sebagai isi poin daftar." },
-{ q: "Tag yang digunakan untuk membuat baris baru (line break) di dalam teks HTML adalah...", o: ["", "
-", "", "", ""], c: 1, e: "
-digunakan untuk berpindah ke baris baru tanpa jeda paragraf." },
-{ q: "Untuk membuat tabel dalam HTML, tag utama pembungkus tabel adalah...", o: ["", "", "", "", ""], c: 2, e: "Elemen tabel dibentuk dengan tag pembuka/penutup ." },
-{ q: "Di dalam tabel HTML, tag apa yang digunakan untuk mendefinisikan baris tabel (table row)?", o: ["", "", "", "", ""], c: 2, e: " singkatan dari Table Row." },
-{ q: "Tag yang digunakan untuk membuat sel data biasa di dalam baris tabel adalah...", o: ["", "", "", "", ""], c: 1, e: " singkatan dari Table Data untuk sel baris isi." },
-{ q: "Manakah tag di bawah ini yang digunakan untuk membuat elemen formulir (form) tempat pengguna memasukkan teks atau data?", o: ["", "", "", "", ""], c: 0, e: "Tag menerima berbagai isian isian interaktif user." },
-{ q: "Atribut type pada tag yang digunakan untuk membuat kotak sandi (password) yang disembunyikan karakternya adalah...", o: ["type='text'", "type='pwd'", "type='password'", "type='secure'", "type='hidden'"], c: 2, e: "Menggunakan type='password' membuat karakter ter-masking bulat/bintang." },
-{ q: "Tag yang digunakan untuk membuat dropdown list atau pilihan menu pilihan ke bawah pada form adalah...", o: ["", "", "", "", ""], c: 1, e: "Menu dropdown memanfaatkan tag yang membungkus kumpulan ." },
-{ q: "Perangkat lunak atau aplikasi yang digunakan untuk menuliskan kode program pembuatan web dinamakan...", o: ["Web Browser", "Code Editor", "Web Server", "Compiler", "Database Engine"], c: 1, e: "Aplikasi penulisan baris kode program disebut Code Editor (seperti VS Code, Notepad++)." },
-{ q: "Kepanjangan dari CSS adalah...", o: ["Cascading Style Sheets", "Creative Style System", "Computer Style Sheets", "Cascading Sheet Style", "Colorful Style Sheets"], c: 0, e: "CSS memiliki kepanjangan resmi Cascading Style Sheets." },
-{ q: "Jika HTML diibaratkan sebagai kerangka rumah, maka fungsi CSS adalah sebagai...", o: ["Tanah pondasi rumah", "Cat, furnitur, dan dekorasi rumah", "Pemilik rumah", "Tukang bangunan", "Atap rumah utama"], c: 1, e: "CSS bertanggung jawab penuh menghias visual kosmetik web agar cantik." },
-{ q: "Di manakah penulisan Internal CSS diletakkan di dalam struktur dokumen HTML?", o: ["Di dalam tag ", "Di dalam tag menggunakan tag ", "Di luar tag ", "Di dalam tag ", "Di dalam tag "], c: 1, e: "Internal CSS ditaruh dalam blok elemen di area ." },
-{ q: "Metode penulisan CSS yang disematkan secara langsung pada atribut suatu elemen HTML disebut...", o: ["External CSS", "Internal CSS", "Inline CSS", "Global CSS", "Local CSS"], c: 2, e: "Penulisan langsung di baris kode tag lewat atribut style disebut Inline CSS." },
-{ q: "Ekstensi file yang digunakan untuk menyimpan dokumen file Cascading Style Sheets eksternal adalah...", o: [".html", ".css", ".style", ".stylesheet", ".cs"], c: 1, e: "Berkas CSS murni wajib disimpan dengan akhiran berkas .css." },
-{ q: "Bagaimana cara menghubungkan file CSS eksternal dengan dokumen HTML?", o: ["Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag ", "Menggunakan tag "], c: 1, e: "Penghubung file luar menggunakan tag " },
-{ q: "Perhatikan penulisan berikut: p { color: red; }. Bagian p dinamakan sebagai...", o: ["Property", "Value", "Selector", "Declaration", "Argument"], c: 2, e: "p menunjuk target elemen mana yang akan diubah, disebut Selector." },
-{ q: "Dalam sintaks color: blue;, kata color bertindak sebagai...", o: ["Selector", "Property", "Value", "Tag", "Class"], c: 1, e: "Atribut modifikasi gaya (seperti color, font-size) dinamai Property." },
-{ q: "Properti CSS yang digunakan untuk mengubah warna teks suatu elemen adalah...", o: ["text-color", "font-color", "color", "background-color", "forecolor"], c: 2, e: "Properti murni pewarnaan font teks di CSS adalah color." },
-{ q: "Properti CSS yang digunakan untuk mengubah jenis huruf atau font adalah...", o: ["font-family", "text-style", "font-type", "typeface", "font-weight"], c: 0, e: "font-family mengatur pergantian jenis tipe font tulisan." },
-{ q: "Simbol atau karakter apa yang digunakan dalam penulisan selector CSS untuk menandai sebuah ID?", o: ["Titik (.)", "Tanda pagar atau hashtag (#)", "Bintang ()", "Ampersand (&)", "Dollar ($)"], c: 1, e: "Selector ID diawali lambang tagar/pagar (#)." },
-{ q: "Simbol atau karakter apa yang digunakan dalam penulisan selector CSS untuk menandai sebuah Class?", o: ["Titik (.)", "Tanda pagar (#)", "At (@)", "Persen (%)", "Tanda seru (!)"], c: 0, e: "Selector Class diwakili simbol titik (.) di awal penamaannya." },
-{ q: "Properti CSS yang digunakan untuk mengubah ukuran teks adalah...", o: ["text-size", "font-size", "size", "text-scale", "font-dimension"], c: 1, e: "font-size mendikte ukuran besar/kecil karakter tulisan." },
-{ q: "Properti CSS yang berfungsi untuk memberi warna latar belakang (background) pada elemen adalah...", o: ["color-background", "bg-color", "background-color", "back-color", "canvas-color"], c: 2, e: "background-color dipakai memberikan pewarnaan bidang latar belakang." },
-{ q: "Untuk membuat teks menjadi rata tengah (center) menggunakan CSS, properti yang dipakai adalah...", o: ["align: center;", "text-align: center;", "position: center;", "font-align: center;", "vertical-align: center;"], c: 1, e: "Perataan text horizontal tengah diatur via text-align: center;." },
-{ q: "Properti CSS yang digunakan untuk mengatur jarak di luar (margin) dari sebuah elemen adalah...", o: ["padding", "spacing", "margin", "border-space", "offset"], c: 2, e: "Jarak batas luar elemen dengan objek sekelilingnya diatur lewat properti margin." },
-{ q: "Properti CSS yang digunakan untuk mengatur jarak di dalam (antara konten dan garis tepi/border) sebuah elemen adalah...", o: ["margin", "padding", "border-inset", "inner-space", "container-gap"], c: 1, e: "Padding memberikan ruang/jarak internal bantalan dalam kotak elemen." },
-{ q: "Bagaimana cara menuliskan komentar yang benar di dalam file atau kode CSS?", o: ["", "// Komentar CSS", "/* Komentar CSS /", "' Komentar CSS", "# Komentar CSS"], c: 2, e: "Sintaks komentar CSS dibuka menggunakan / dan diakhiri */." },
-{ q: "Properti CSS mana yang digunakan untuk menebalkan teks?", o: ["font-style", "text-weight", "font-weight", "bold-property", "text-bold"], c: 2, e: "Tingkat ketebalan huruf dikelola lewat font-weight." },
-{ q: "Nilai (value) apa yang biasa diberikan pada properti font-weight untuk membuat teks menjadi tebal?", o: ["italic", "bold", "thicker", "bolder", "Jawaban B dan D benar"], c: 4, e: "Baik nilai 'bold' maupun 'bolder' valid dipakai menginstruksikan ketebalan aksara." },
-{ q: "Properti CSS yang digunakan untuk memberikan garis tepi (border) pada elemen memiliki format ringkas, salah satunya seperti border: 1px solid black;. Apa arti dari 1px di sana?", o: ["Jenis garis tepi", "Warna garis tepi", "Ketebalan atau lebar garis tepi", "Panjang garis tepi", "Transparansi garis tepi"], c: 2, e: "Satuan pixel (1px) di penulisan border menentukan tebal tipisnya garis." },
-{ q: "Properti CSS yang digunakan untuk membuat sudut elemen menjadi melengkung adalah...", o: ["corner-radius", "border-radius", "curve-edge", "edge-radius", "radius-style"], c: 1, e: "border-radius memotong tajamnya sudut kotak menjadi melengkung/halus." },
-{ q: "Nilai properti display pada CSS yang membuat suatu elemen ditampilkan memenuhi satu baris penuh dan elemen setelahnya turun ke baris baru adalah...", o: ["inline", "block", "flex", "none", "grid"], c: 1, e: "Elemen block secara natural memesan seluruh baris menyamping untuk dirinya sendiri." },
-{ q: "Jika kita ingin menyembunyikan sebuah elemen HTML agar tidak tampil sama sekali di halaman web menggunakan CSS, nilai properti display yang digunakan adalah...", o: ["hidden", "invisible", "none", "off", "zero"], c: 2, e: "display: none; akan menghilangkan elemen dari alur tata letak halaman secara total." },
-{ q: "Manakah urutan prioritas (cascading order) kekuatan aturan CSS yang benar dari yang paling tinggi jika terjadi konflik penulisan?", o: ["External CSS > Internal CSS > Inline CSS", "Internal CSS > Inline CSS > External CSS", "Inline CSS > Internal CSS > External CSS", "External CSS > Inline CSS > Internal CSS", "Semuanya memiliki derajat kekuatan yang sama rata"], c: 2, e: "Inline CSS (atribut objek langsung) memenangkan prioritas tertinggi, disusul Internal lalu berkas luar (External)." }
-];
-let indexAktif = 0;
-let jawabanSantri = new Array(dataset.length).fill(null);
-let sisaWaktu = 60 * 60; // Waktu Pengerjaan 60 Menit
-let intervalTimer;
-let namaSantri = "";
-let kelasSantri = "";
-function startExam() {
-namaSantri = document.getElementById("student-name").value.trim();
-kelasSantri = document.getElementById("student-class").value;
-if (!namaSantri || !kelasSantri) {
-alert("Harap isi Nama Lengkap dan pilih Kelas terlebih dahulu!");
-return;
-}
-// Ganti Screen Tampilan
-document.getElementById("login-screen").classList.add("hide");
-document.getElementById("quiz-screen").classList.remove("hide");
-// Pasang Informasi Santri
-document.getElementById("display-name").innerText = namaSantri;
-document.getElementById("display-class").innerText = "Kelas: " + kelasSantri;
-// Jalankan Kuis
-renderQuestion();
-startCountdown();
-}
-function renderQuestion() {
-const currentItem = dataset[indexAktif];
-// Render Teks Soal & Progress
-document.getElementById("progress-text").innerText = Soal ${indexAktif + 1} dari ${dataset.length};
-document.getElementById("question-text").innerText = ${indexAktif + 1}. ${currentItem.q};
-// Render Opsi Jawaban
-const optionsBox = document.getElementById("options-box");
-optionsBox.innerHTML = "";
-const alfabet = ["A", "B", "C", "D", "E"];
-currentItem.o.forEach((opsi, idx) => {
-const optCard = document.createElement("div");
-optCard.className = option-card ${jawabanSantri[indexAktif] === idx ? 'active' : ''};
-optCard.onclick = () => selectAnswer(idx);
-optCard.innerHTML = <div class="option-letter">${alfabet[idx]}</div> <div class="option-text">${escapeHTML(opsi)}</div>;
-optionsBox.appendChild(optCard);
-});
-// Atur Visibilitas Tombol Navigasi
-document.getElementById("btn-back").style.visibility = indexAktif === 0 ? "hidden" : "visible";
-if (indexAktif === dataset.length - 1) {
-document.getElementById("btn-next").style.display = "none";
-document.getElementById("btn-submit-exam").style.display = "block";
-} else {
-document.getElementById("btn-next").style.display = "block";
-document.getElementById("btn-submit-exam").style.display = "none";
-}
-}
-function selectAnswer(indexOpsi) {
-jawabanSantri[indexAktif] = indexOpsi;
-renderQuestion();
-}
-function navigate(arah) {
-indexAktif += arah;
-renderQuestion();
-}
-function startCountdown() {
-intervalTimer = setInterval(() => {
-if (sisaWaktu <= 0) {
-clearInterval(intervalTimer);
-alert("Waktu ujian telah habis!");
-submitExam(true);
-} else {
-sisaWaktu--;
-let m = Math.floor(sisaWaktu / 60);
-let s = sisaWaktu % 60;
-document.getElementById("timer-display").innerText = Sisa Waktu: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')};
-}
-}, 1000);
-}
-function submitExam(isAuto) {
-if (!isAuto) {
-const sisaKosong = jawabanSantri.filter(ans => ans === null).length;
-let pesan = "Apakah Anda yakin ingin menyelesaikan dan mengirim jawaban ujian?";
-if(sisaKosong > 0) {
-pesan = Peringatan: Masih ada ${sisaKosong} soal yang belum dijawab. + pesan;
-}
-if (!confirm(pesan)) return;
-}
-clearInterval(intervalTimer);
-// Hitung Skor Akhir
-let totalBenar = 0;
-dataset.forEach((item, idx) => {
-if (jawabanSantri[idx] === item.c) {
-totalBenar++;
-}
-});
-let nilaiAkhir = Math.round((totalBenar / dataset.length) * 100);
-// Tampilkan Screen Hasil
-document.getElementById("quiz-screen").classList.add("hide");
-document.getElementById("result-screen").classList.remove("hide");
-// Pasang Skor Ringkasan
-document.getElementById("result-meta").innerText = Santri: ${namaSantri} | Kelas: ${kelasSantri};
-document.getElementById("score-val").innerText = nilaiAkhir;
-document.getElementById("score-circle-element").style.setProperty('--percentage', ${nilaiAkhir}%);
-document.getElementById("score-summary").innerText = Menjawab Benar ${totalBenar} dari ${dataset.length} Soal.;
-// Buat Lembar Review Pembahasan Soal
-generateReview();
-}
-function generateReview() {
-const reviewBox = document.getElementById("review-list-box");
-reviewBox.innerHTML = "";
-const alfabet = ["A", "B", "C", "D", "E"];
-dataset.forEach((item, idx) => {
-const statusBenar = jawabanSantri[idx] === item.c;
-const reviewItem = document.createElement("div");
-reviewItem.className = review-item ${statusBenar ? 'correct' : 'wrong'};
-let teksJawabanSantri = jawabanSantri[idx] !== null ? ${alfabet[jawabanSantri[idx]]}. ${item.o[jawabanSantri[idx]]} : "(Tidak Dijawab)";
-let teksKunciBenar = ${alfabet[item.c]}. ${item.o[item.c]};
-reviewItem.innerHTML = <div class="review-q">${idx + 1}. ${item.q}</div> <div class="review-ans" style="color: ${statusBenar ? '#10b981' : '#ef4444'}"> <strong>Jawaban Anda:</strong> ${escapeHTML(teksJawabanSantri)} ${statusBenar ? '✓' : '✗'} </div> ${!statusBenar ?Kunci Jawaban: ${escapeHTML(teksKunciBenar)}: ''} <div class="explanation-box"> <strong>Pembahasan:</strong> ${item.e} </div>;
-reviewBox.appendChild(reviewItem);
-});
-}
-function escapeHTML(str) {
-return str.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """);
-}
+    </div>
 
+    <script>
+        // Data Bank Soal 60 Soal Desain Layout, Tipografi & InDesign Lengkap dengan Kunci & Pembahasan
+        const questionsData = [
+            {
+                q: "Apa yang dimaksud dengan 'Layout' dalam dunia desain?",
+                options: [
+                    "A. Proses mewarnai gambar digital",
+                    "B. Pengaturan atau tata letak elemen visual pada sebuah halaman",
+                    "C. Teknik mencetak majalah menggunakan mesin besar",
+                    "D. Cara mengedit video agar terlihat sinematik",
+                    "E. Menghapus latar belakang sebuah foto"
+                ],
+                answer: 1,
+                explanation: "Layout adalah tata letak atau pengaturan elemen visual (seperti teks, gambar, grafik) pada sebuah halaman agar komunikatif dan estetis."
+            },
+            {
+                q: "Supaya mata pembaca tidak lelah dan tahu bagian mana yang harus dibaca duluan, desainer mengatur urutan kepentingan yang disebut ...",
+                options: [
+                    "A. Ukuran kertas",
+                    "B. Ketebalan laptop",
+                    "C. Hierarki visual",
+                    "D. Harga aplikasi",
+                    "E. Kecepatan internet"
+                ],
+                answer: 2,
+                explanation: "Hierarki visual adalah prinsip mengatur elemen berdasarkan tingkat kepentingan agar mata pembaca terarah dengan nyaman."
+            },
+            {
+                q: "Garis bantu di pinggir kertas yang berfungsi menjaga agar teks tidak terlalu mepet ke tepi halaman disebut...",
+                options: [
+                    "A. Bleed",
+                    "B. Margin",
+                    "C. Ruler",
+                    "D. Slug",
+                    "E. Grid"
+                ],
+                answer: 1,
+                explanation: "Margin adalah batas area kosong di sekeliling halaman cetak untuk menjaga teks dan elemen agar tidak terlalu dekat dengan tepi kertas."
+            },
+            {
+                q: "Ilmu yang mempelajari tentang pemilihan, penataan, dan pengaturan huruf disebut...",
+                options: [
+                    "A. Fotografi",
+                    "B. Kalkulasi",
+                    "C. Tipografi",
+                    "D. Ilustrasi",
+                    "E. Kartografi"
+                ],
+                answer: 2,
+                explanation: "Tipografi adalah seni dan teknik memilih serta menata huruf agar teks mudah dibaca dan estetik."
+            },
+            {
+                q: "Jarak antar baris teks dalam satu paragraf agar nyaman dibaca disebut...",
+                options: [
+                    "A. Tracking",
+                    "B. Kerning",
+                    "C. Leading",
+                    "D. Alignment",
+                    "E. Justify"
+                ],
+                answer: 2,
+                explanation: "Leading adalah jarak vertikal antara satu baris teks dengan baris teks di bawahnya dalam satu paragraf."
+            },
+            {
+                q: "Jika kamu ingin mengatur jarak longgar atau rapatnya huruf dalam satu kata secara keseluruhan, fitur apa yang kamu gunakan?",
+                options: [
+                    "A. Leading",
+                    "B. Tracking",
+                    "C. Kerning",
+                    "D. Justify",
+                    "E. Indent"
+                ],
+                answer: 1,
+                explanation: "Tracking mengatur jarak antarhuruf secara merata pada rentang kata atau kalimat secara keseluruhan."
+            },
+            {
+                q: "Apa yang dimaksud dengan 'White Space' atau 'Negative Space' dalam layout?",
+                options: [
+                    "A. Area kosong di sekitar elemen desain agar halaman tidak terlihat sesak",
+                    "B. Kertas kosong yang belum diprint",
+                    "C. Kesalahan warna saat mencetak dokumen",
+                    "D. Latar belakang yang harus selalu berwarna putih bersih",
+                    "E. Tempat untuk menaruh semua gambar"
+                ],
+                answer: 0,
+                explanation: "White space adalah ruang kosong yang sengaja dibiarkan agar desain terasa lapang, bersih, dan fokus pada konten utama."
+            },
+            {
+                q: "Aplikasi Adobe InDesign paling cocok digunakan untuk membuat proyek apa?",
+                options: [
+                    "A. Mengedit foto jerawat dan memanipulasi gambar",
+                    "B. Membuat logo berbentuk vektor dari nol",
+                    "C. Menyusun tata letak buku, majalah, dan e-book multi-halaman",
+                    "D. Mengedit efek suara dan video musik",
+                    "E. Membuat animasi 3D"
+                ],
+                answer: 2,
+                explanation: "Adobe InDesign adalah software industri standar untuk desktop publishing, majalah, buku, dan publikasi multi-halaman."
+            },
+            {
+                q: "Sistem pewarnaan yang paling tepat digunakan jika majalah yang kita layout ingin dicetak ke percetakan adalah...",
+                options: [
+                    "A. RGB",
+                    "B. CMYK",
+                    "C. Grayscale",
+                    "D. Hex Color",
+                    "E. Lab Color"
+                ],
+                answer: 1,
+                explanation: "CMYK (Cyan, Magenta, Yellow, Black) adalah standar warna berbasis tinta untuk mesin cetak offset maupun digital printing."
+            },
+            {
+                q: "Sistem pewarnaan RGB paling cocok digunakan untuk desain yang akan ditampilkan di...",
+                options: [
+                    "A. Brosur kertas lipat",
+                    "B. Layar monitor, HP, dan media sosial",
+                    "C. Baliho pinggir jalan",
+                    "D. Kaos sablon",
+                    "E. Kardus kemasan makanan"
+                ],
+                answer: 1,
+                explanation: "RGB berbasis cahaya cocok untuk media layar digital seperti monitor komputer, handphone, dan web."
+            },
+            {
+                q: "Elemen layout berupa teks ringkas atau kutipan menarik yang sengaja diperbesar di tengah artikel untuk menarik perhatian disebut...",
+                options: [
+                    "A. Headline",
+                    "B. Body text",
+                    "C. Pull-quote",
+                    "D. Caption",
+                    "E. Sub-headline"
+                ],
+                answer: 2,
+                explanation: "Pull-quote adalah kutipan teks penting dari artikel yang diperbesar untuk menarik pembaca agar tertarik membaca keseluruhan isi."
+            },
+            {
+                q: "Teks kecil yang berada di bawah foto untuk menjelaskan isi foto tersebut dinamakan...",
+                options: [
+                    "A. Header",
+                    "B. Caption",
+                    "C. Footer",
+                    "D. Sub-headline",
+                    "E. Byline"
+                ],
+                answer: 1,
+                explanation: "Caption adalah keterangan ringkas di bawah foto atau ilustrasi."
+            },
+            {
+                q: "Perataan teks yang rata di sisi kiri dan rata di sisi kanan sekaligus disebut...",
+                options: [
+                    "A. Align Left",
+                    "B. Center",
+                    "C. Justify",
+                    "D. Align Right",
+                    "E. Force Left"
+                ],
+                answer: 2,
+                explanation: "Justify membuat teks rata di kedua sisi margin kiri dan kanan."
+            },
+            {
+                q: "Saat membuka Adobe InDesign, shortcut cepat untuk membuat dokumen baru adalah...",
+                options: [
+                    "A. Ctrl + S",
+                    "B. Ctrl + N",
+                    "C. Ctrl + O",
+                    "D. Ctrl + P",
+                    "E. Ctrl + J"
+                ],
+                answer: 1,
+                explanation: "Ctrl + N adalah shortcut universal untuk New Document di berbagai aplikasi Adobe."
+            },
+            {
+                q: "Pilihan 'Facing Pages' saat membuat dokumen baru di InDesign digunakan agar halaman kita...",
+                options: [
+                    "A. Berubah menjadi format video",
+                    "B. Tampil berpasangan kiri-kanan seperti buku terbuka",
+                    "C. Otomatis tersimpan di Google Drive",
+                    "D. Hanya terdiri dari satu halaman memanjang ke bawah",
+                    "E. Berwarna warni otomatis"
+                ],
+                answer: 1,
+                explanation: "Facing pages menampilkan lembar kerja berdampingan (spread) seperti layout buku terbuka."
+            },
+            {
+                q: "Apa fungsi dari area 'Bleed' pada pengaturan dokumen InDesign?",
+                options: [
+                    "A. Tempat menaruh teks utama",
+                    "B. Area aman di luar garis potong agar saat kertas dipotong tidak muncul garis putih",
+                    "C. Batas untuk memasukkan nomor halaman",
+                    "D. Untuk mengatur resolusi gambar agar tidak pecah",
+                    "E. Tempat untuk menulis nama pengarang buku"
+                ],
+                answer: 1,
+                explanation: "Bleed adalah area ekstra di luar ukuran trim kertas untuk mengantisipasi pergeseran mesin potong cetak."
+            },
+            {
+                q: "Satuan panjang yang paling sering dan umum digunakan di Indonesia saat me-layout dokumen siap cetak adalah...",
+                options: [
+                    "A. Pixels",
+                    "B. Points",
+                    "C. Picas",
+                    "D. Millimeters / Centimeters",
+                    "E. Inches"
+                ],
+                answer: 3,
+                explanation: "Milimeter dan sentimeter adalah satuan metrik standar yang umum dipakai dalam industri percetakan di Indonesia."
+            },
+            {
+                q: "Di sebelah mana biasanya letak 'Toolbox' (kumpulan alat-alat kerja) secara default di InDesign?",
+                options: [
+                    "A. Di paling bawah layar",
+                    "B. Di sebelah kiri layar",
+                    "C. Di sebelah kanan layar",
+                    "D. Tersembunyi di dalam menu File",
+                    "E. Di atas Control Panel"
+                ],
+                answer: 1,
+                explanation: "Secara default, Toolbox utama InDesign terletak di sisi kiri workspace."
+            },
+            {
+                q: "Jika panel penting seperti panel 'Pages' atau 'Layers' mendadak hilang, menu apa yang harus kita buka untuk memunculkannya kembali?",
+                options: [
+                    "A. File",
+                    "B. Edit",
+                    "C. Window",
+                    "D. Layout",
+                    "E. View"
+                ],
+                answer: 2,
+                explanation: "Menu Window digunakan untuk mengontrol dan menampilkan seluruh panel kerja di aplikasi Adobe."
+            },
+            {
+                q: "Bagian workspace di luar halaman putih yang bisa kita gunakan untuk menaruh gambar sementara dinamakan...",
+                options: [
+                    "A. Pasteboard",
+                    "B. Control Panel",
+                    "C. Document Window",
+                    "D. Status Bar",
+                    "E. Toolbar"
+                ],
+                answer: 0,
+                explanation: "Pasteboard adalah area abu-abu di sekitar halaman kerja yang berfungsi sebagai meja kerja sementara."
+            },
+            {
+                q: "Tombol di keyboard yang berfungsi untuk menyembunyikan semua garis bantu dan panel agar kita bisa melihat hasil bersih layout adalah...",
+                options: [
+                    "A. Tombol Space",
+                    "B. Tombol W",
+                    "C. Tombol Enter",
+                    "D. Tombol Esc",
+                    "E. Tombol Tab"
+                ],
+                answer: 1,
+                explanation: "Tombol W beralih antara Normal Mode (dengan grid/guides) dan Preview Mode (bersih)."
+            },
+            {
+                q: "Bagaimana cara mengubah orientasi halaman dari tegak (Portrait) menjadi mendatar (Landscape)?",
+                options: [
+                    "A. Mengubah warna background",
+                    "B. Mengaturnya di bagian Orientation pada Document Setup",
+                    "C. Memutar monitor komputer sebesar 90 derajat",
+                    "D. Menggunakan Selection Tool lalu ditarik miring",
+                    "E. Menghapus semua halaman lalu buat baru"
+                ],
+                answer: 1,
+                explanation: "Orientation di Document Setup atau File > Document Setup mengatur halaman Portrait atau Landscape."
+            },
+            {
+                q: "Fitur 'Columns' pada pengaturan dokumen baru digunakan untuk...",
+                options: [
+                    "A. Membuat jumlah halaman otomatis bertambah",
+                    "B. Membagi halaman menjadi beberapa lajur kolom teks",
+                    "C. Mengubah jenis font secara massal",
+                    "D. Memberikan efek bayangan pada gambar",
+                    "E. Mengatur jarak antar halaman"
+                ],
+                answer: 1,
+                explanation: "Columns membagi halaman atau frame teks menjadi beberapa kolom vertikal."
+            },
+            {
+                q: "Untuk menyimpan lembar kerja InDesign menjadi file mentah yang bisa diedit lagi nanti, format filenya adalah...",
+                options: [
+                    "A. .jpg",
+                    "B. .mp3",
+                    "C. .indd",
+                    "D. .html",
+                    "E. .psd"
+                ],
+                answer: 2,
+                explanation: ".indd adalah format file dokumen asli Adobe InDesign."
+            },
+            {
+                q: "Jika ingin memperbesar (Zoom In) tampilan halaman kerja dengan keyboard, kita menekan tombol...",
+                options: [
+                    "A. Ctrl dan (tanda plus)",
+                    "B. Ctrl dan (tanda minus)",
+                    "C. Ctrl dan Z",
+                    "D. Ctrl dan A",
+                    "E. Ctrl dan S"
+                ],
+                answer: 0,
+                explanation: "Ctrl + Plus (+) digunakan untuk memperbesar tampilan (Zoom In)."
+            },
+            {
+                q: "Di panel mana kita bisa melihat, menambah, menghapus, atau memindahkan urutan halaman dokumen kita?",
+                options: [
+                    "A. Panel Links",
+                    "B. Panel Swatches",
+                    "C. Panel Pages",
+                    "D. Panel Character",
+                    "E. Panel Layers"
+                ],
+                answer: 2,
+                explanation: "Panel Pages menampilkan struktur halaman dokumen secara visual."
+            },
+            {
+                q: "Apa guna dari 'Rulers' (Penggaris) yang ada di bagian atas dan kiri lembar kerja?",
+                options: [
+                    "A. Untuk menghitung jumlah kata",
+                    "B. Untuk membantu mengukur posisi elemen dan menarik garis bantu (Guides)",
+                    "C. Untuk memotong gambar secara otomatis",
+                    "D. Sebagai hiasan aplikasi saja",
+                    "E. Untuk mengubah ukuran font"
+                ],
+                answer: 1,
+                explanation: "Rulers membantu presisi pengukuran dan pembuatan garis bantu (guides)."
+            },
+            {
+                q: "Alat utama yang digunakan untuk memilih, menggeser, dan mengubah ukuran kotak gambar/teks secara umum adalah...",
+                options: [
+                    "A. Type Tool",
+                    "B. Selection Tool (Panah Hitam)",
+                    "C. Direct Selection Tool (Panah Putih)",
+                    "D. Pen Tool",
+                    "E. Eraser Tool"
+                ],
+                answer: 1,
+                explanation: "Selection Tool (V) dengan ikon panah hitam digunakan untuk memanipulasi keseluruhan objek/frame."
+            },
+            {
+                q: "Di InDesign, untuk mengetik teks kita wajib membuat kotaknya terlebih dahulu menggunakan...",
+                options: [
+                    "A. Line Tool",
+                    "B. Pencil Tool",
+                    "C. Type Tool",
+                    "D. Rectangle Frame Tool",
+                    "E. Gradient Tool"
+                ],
+                answer: 2,
+                explanation: "Type Tool (T) digunakan untuk membuat Text Frame tempat mengetik naskah."
+            },
+            {
+                q: "Langkah yang benar untuk memasukkan foto atau gambar dari komputer ke dalam layout InDesign adalah...",
+                options: [
+                    "A. Menu File -> Place",
+                    "B. Menu File -> Export",
+                    "C. Menu Edit -> Paste Special",
+                    "D. Menu Layout -> Pages",
+                    "E. Menu View -> Screen Mode"
+                ],
+                answer: 0,
+                explanation: "File > Place (Ctrl + D) adalah perintah standar untuk memasukkan gambar/teks eksternal."
+            },
+            {
+                q: "Mengapa gambar yang baru dimasukkan ke InDesign terkadang terlihat agak buram/pecah-pecah di layar?",
+                options: [
+                    "A. Karena komputer kita rusak",
+                    "B. Karena InDesign otomatis menghemat memori layar (Display Performance: Typical)",
+                    "C. Karena gambar tersebut otomatis terhapus",
+                    "D. Karena format gambarnya salah",
+                    "E. Karena kita belum membayar lisensi aplikasi"
+                ],
+                answer: 1,
+                    explanation: "InDesign mengatur Display Performance ke 'Typical' agar performa ringan, namun kualitas layar bisa diubah ke 'High Quality Display'."
+            },
+            {
+                q: "Agar gambar di dalam kotak otomatis membesar/mengecil pas dengan ukuran kotaknya tanpa menjadi peyang, kita memilih fitur...",
+                options: [
+                    "A. Clear Transformations",
+                    "B. Fitting -> Fill Frame Proportionally",
+                    "C. Convert to Shape",
+                    "D. Display Performance",
+                    "E. Arrange -> Bring to Front"
+                ],
+                answer: 1,
+                explanation: "Fill Frame Proportionally mengisi frame dengan proporsi gambar asli yang terjaga."
+            },
+            {
+                q: "Ikon berbentuk huruf 'T' di toolbox digunakan untuk membuat teks. Apa nama tool tersebut?",
+                options: [
+                    "A. Text Tool",
+                    "B. Type Tool",
+                    "C. Title Tool",
+                    "D. Tag Tool",
+                    "E. Tool Text"
+                ],
+                answer: 1,
+                explanation: "Nama resminya adalah Type Tool."
+            },
+            {
+                q: "Jika ingin membuat objek berbentuk lingkaran sempurna, kita menggunakan Ellipse Tool sambil menahan tombol...",
+                options: [
+                    "A. Ctrl",
+                    "B. Alt",
+                    "C. Shift",
+                    "D. Caps Lock",
+                    "E. Tab"
+                ],
+                answer: 2,
+                explanation: "Menahan tombol Shift saat menggambar bentuk geometris akan mengunci aspek rasio menjadi sempurna."
+            },
+            {
+                q: "Fitur 'Text Wrap' digunakan untuk situasi seperti apa?",
+                options: [
+                    "A. Membuat teks berubah menjadi bahasa asing",
+                    "B. Memaksa teks agar mengikuti bentuk objek/gambar di dekatnya dan tidak saling bertumpukan",
+                    "C. Mewarnai huruf dengan warna gradasi",
+                    "D. Menyembunyikan teks yang terlalu panjang",
+                    "E. Menggabungkan dua paragraf yang terpisah"
+                ],
+                answer: 1,
+                explanation: "Text wrap mengatur agar naskah teks mengalir rapi menghindari ilustrasi atau objek lain."
+            },
+            {
+                q: "Jika ada tanda plus warna merah (+) di pojok kanan bawah kotak teks, itu artinya...",
+                options: [
+                    "A. Teks sudah selesai diketik semua",
+                    "B. Ada teks yang tersembunyi/tidak muat di dalam kotak tersebut (Overset Text)",
+                    "C. Kotak teks tersebut mengandung virus",
+                    "D. Teks otomatis tersimpan di cloud",
+                    "E. Kotak teks harus segera dihapus"
+                ],
+                answer: 1,
+                explanation: "Indikator overset text (+) menandakan naskah melebihi kapasitas kotak teks yang tersedia."
+            },
+            {
+                q: "Untuk menggabungkan beberapa objek atau gambar agar saat digeser tidak terpisah-pisah, kita menggunakan perintah...",
+                options: [
+                    "A. Lock (Ctrl + L)",
+                    "B. Group (Ctrl + G)",
+                    "C. Hide (Ctrl + 3)",
+                    "D. Merge",
+                    "E. Align"
+                ],
+                answer: 1,
+                explanation: "Ctrl + G (Group) menyatukan beberapa objek menjadi satu kesatuan."
+            },
+            {
+                q: "Fitur 'Parent Pages' (Master Pages) di InDesign sangat berguna untuk...",
+                options: [
+                    "A. Membuat logo berwarna-warni",
+                    "B. Menaruh elemen yang selalu muncul di setiap halaman, seperti nomor halaman atau logo majalah",
+                    "C. Mengedit foto agar menjadi lebih cerah",
+                    "D. Menghitung biaya cetak buku",
+                    "E. Membuat daftar isi otomatis"
+                ],
+                answer: 1,
+                explanation: "Parent Pages berfungsi sebagai template dasar elemen yang berulang di banyak halaman."
+            },
+            {
+                q: "Bagaimana cara membuat nomor halaman otomatis berjalan di Parent Pages?",
+                options: [
+                    "A. Mengetik angka 1, 2, 3 manual di setiap halaman",
+                    "B. Menu Type -> Insert Special Character -> Markers -> Current Page Number",
+                    "C. Menu File -> Page Setup -> Numbering",
+                    "D. Mengetik nama kita sendiri di pojok halaman",
+                    "E. Menggunakan perintah Ctrl + Alt + N pada halaman biasa"
+                ],
+                answer: 1,
+                explanation: "Insert Special Character > Markers > Current Page Number memunculkan penomoran otomatis (simbol 'A')."
+            },
+            {
+                q: "Jika majalah sekolah yang kita buat sudah selesai di-layout dan ingin dikirim ke teman-teman dalam bentuk file yang siap dibaca di HP, kita mengeksportnya ke format...",
+                options: [
+                    "A. .mp4",
+                    "B. .png",
+                    "C. .pdf (Adobe PDF Print/Interactive)",
+                    "D. .exe",
+                    "E. .gif"
+                ],
+                answer: 2,
+                explanation: "Format PDF (Interactive atau Print) adalah standar universal untuk dibagikan dan dibaca di berbagai perangkat termasuk HP."
+            },
+            {
+                q: "Apa fungsi dari panel 'Swatches' di Adobe InDesign?",
+                options: [
+                    "A. Mengatur ukuran dan jenis huruf",
+                    "B. Menyimpan dan memilih palet warna untuk objek atau teks",
+                    "C. Mengatur tingkat transparansi gambar",
+                    "D. Mengatur tata letak halaman secara otomatis",
+                    "E. Memeriksa ejaan kata dalam bahasa Inggris"
+                ],
+                answer: 1,
+                explanation: "Swatches adalah perpustakaan warna untuk mengisi objek dan teks."
+            },
+            {
+                q: "Jika kita ingin membuat sebuah teks memiliki latar belakang kotak berwarna, menu atau panel apa yang paling cepat digunakan untuk memberi warna pada kotak teks tersebut?",
+                options: [
+                    "A. Character Panel",
+                    "B. Swatches Panel (dengan menyeleksi frame/kotaknya langsung)",
+                    "C. Paragraph Panel",
+                    "D. Effects Panel",
+                    "E. Stroke Panel"
+                ],
+                answer: 1,
+                explanation: "Dengan menyeleksi frame teks menggunakan Selection Tool, panel Swatches dapat langsung mewarnai background kotak."
+            },
+            {
+                q: "Apa fungsi utama dari 'Direct Selection Tool' (ikon panah putih) di InDesign?",
+                options: [
+                    "A. Memindahkan seluruh kotak gambar",
+                    "B. Mengedit titik-titik (anchor points) atau bentuk garis dari suatu objek",
+                    "C. Mengetik paragraf baru",
+                    "D. Memperbesar ukuran seluruh halaman",
+                    "E. Menghapus teks secara permanen"
+                ],
+                answer: 1,
+                explanation: "Direct Selection Tool (A) mengedit detail titik path (anchor points) dan isi dalam frame."
+            },
+            {
+                q: "Dalam tipografi, istilah 'Kerning' merujuk pada...",
+                options: [
+                    "A. Jarak spasi antar baris",
+                    "B. Pengaturan jarak khusus antara dua huruf tertentu agar terlihat seimbang",
+                    "C. Ukuran tebal tipisnya sebuah font",
+                    "D. Jarak margin kiri dan kanan",
+                    "E. Pemotongan teks yang kepanjangan"
+                ],
+                answer: 1,
+                explanation: "Kerning adalah penyesuaian jarak spasi antara dua karakter huruf spesifik agar tampak harmonis."
+            },
+            {
+                q: "Manakah di bawah ini yang termasuk ke dalam kelompok jenis huruf (font) yang memiliki sirip/kaki di ujung hurufnya (contoh: Times New Roman)?",
+                options: [
+                    "A. Sans Serif",
+                    "B. Serif",
+                    "C. Script",
+                    "D. Display",
+                    "E. Monospace"
+                ],
+                answer: 1,
+                explanation: "Serif adalah klasifikasi huruf yang memiliki elemen sirip atau kaki di ujung strokenya."
+            },
+            {
+                q: "Font jenis 'Sans Serif' (contoh: Arial, Helvetica) umumnya memiliki karakteristik...",
+                options: [
+                    "A. Memiliki hiasan ekor dan kaki yang rumit",
+                    "B. Bersih, modern, dan tidak memiliki sirip di ujungnya",
+                    "C. Menyerupai tulisan tangan manusia",
+                    "D. Mirip mesin tik jaman dulu",
+                    "E. Sangat sulit dibaca dalam ukuran kecil"
+                ],
+                answer: 1,
+                explanation: "Sans Serif berarti tanpa serif (tanpa sirip), memberikan kesan bersih dan modern."
+            },
+            {
+                q: "Ketika kita ingin membuat garis tepi (outline) pada sebuah kotak atau teks, pengaturan ketebalannya diatur melalui panel...",
+                options: [
+                    "A. Fill",
+                    "B. Stroke",
+                    "C. Swatches",
+                    "D. Transform",
+                    "E. Align"
+                ],
+                answer: 1,
+                explanation: "Stroke mengatur ketebalan garis tepi objek."
+            },
+            {
+                q: "Apa fungsi dari fitur 'Effects -> Transparency' pada sebuah objek di InDesign?",
+                options: [
+                    "A. Membuat objek menjadi transparan atau tembus pandang",
+                    "B. Membuat objek berkedip-kedip",
+                    "C. Menghilangkan objek secara total",
+                    "D. Mengubah format warna dari CMYK ke RGB",
+                    "E. Mengunci posisi objek agar tidak bisa digeser"
+                ],
+                answer: 0,
+                explanation: "Transparency mengatur tingkat keburaman (opacity) objek."
+            },
+            {
+                q: "Mengapa layout majalah atau surat kabar umumnya menggunakan sistem 'Grid'?",
+                options: [
+                    "A. Agar halaman terlihat penuh dengan garis-garis",
+                    "B. Supaya desainer lebih cepat bekerja tanpa berpikir",
+                    "C. Untuk menjaga konsistensi, kerapian, dan keteraturan penempatan elemen visual",
+                    "D. Sebagai syarat wajib dari percetakan internasional",
+                    "E. Agar file ukuran dokumen menjadi lebih kecil"
+                ],
+                answer: 2,
+                explanation: "Grid adalah fondasi struktural untuk menjaga keteraturan dan estetika layout."
+            },
+            {
+                q: "Apa yang dimaksud dengan istilah 'Orphan' dalam dunia layout/penerbitan teks?",
+                options: [
+                    "A. Buku yang tidak memiliki judul",
+                    "B. Huruf yang tercetak miring secara tidak sengaja",
+                    "C. Baris pertama dari sebuah paragraf yang tertinggal sendirian di bagian paling bawah halaman",
+                    "D. Paragraf yang tidak memiliki titik di akhir kalimat",
+                    "E. Gambar ilustrasi yang tidak ada penjelasannya"
+                ],
+                answer: 2,
+                explanation: "Orphan adalah baris awal paragraf yang tertinggal di akhir halaman."
+            },
+            {
+                q: "Apa yang dimaksud dengan 'Widow' dalam aturan penataan teks paragraf?",
+                options: [
+                    "A. Judul bab yang terlewat",
+                    "B. Baris terakhir dari sebuah paragraf yang berada sendirian di bagian paling atas halaman berikutnya",
+                    "C. Teks yang ukurannya terlalu besar",
+                    "D. Spasi kosong di antara dua kolom",
+                    "E. Halaman kosong di tengah buku"
+                ],
+                answer: 1,
+                explanation: "Widow adalah baris terakhir paragraf yang terdorong sendirian ke halaman baru."
+            },
+            {
+                q: "Shortcut keyboard untuk melakukan 'Copy' pada objek yang dipilih di InDesign adalah...",
+                options: [
+                    "A. Ctrl + X",
+                    "B. Ctrl + V",
+                    "C. Ctrl + C",
+                    "D. Ctrl + Z",
+                    "E. Ctrl + A"
+                ],
+                answer: 2,
+                explanation: "Ctrl + C adalah shortcut standar untuk menyalin objek."
+            },
+            {
+                q: "Shortcut keyboard untuk melakukan 'Paste' objek yang sudah disalin adalah...",
+                options: [
+                    "A. Ctrl + D",
+                    "B. Ctrl + S",
+                    "C. Ctrl + V",
+                    "D. Ctrl + P",
+                    "E. Ctrl + F"
+                ],
+                answer: 2,
+                explanation: "Ctrl + V adalah shortcut standar untuk menempelkan objek."
+            },
+            {
+                q: "Fitur apa yang digunakan jika kita ingin melipatgandakan objek dengan cepat sambil langsung menggesernya di InDesign?",
+                options: [
+                    "A. Klik kanan lalu pilih Delete",
+                    "B. Menahan tombol Alt (Option di Mac) lalu mendag/geser objek menggunakan Selection Tool",
+                    "C. Menekan tombol Ctrl + Shift + G",
+                    "D. Menggunakan Type Tool pada objek",
+                    "E. Mengekspor dokumen ke PDF"
+                ],
+                answer: 1,
+                explanation: "Menahan tombol Alt sambil mendrag objek di InDesign akan otomatis menduplikasi objek tersebut."
+            },
+            {
+                q: "Manakah format file gambar di bawah ini yang mendukung latar belakang transparan dan sangat baik digunakan dalam layout?",
+                options: [
+                    "A. .jpg",
+                    "B. .png",
+                    "C. .bmp",
+                    "D. .txt",
+                    "E. .doc"
+                ],
+                answer: 1,
+                explanation: "PNG mendukung transparansi alpha sehingga ideal untuk grafis dan foto tanpa background putih kaku."
+            },
+            {
+                q: "Apa fungsi dari panel 'Links' di Adobe InDesign?",
+                options: [
+                    "A. Menghubungkan internet ke komputer",
+                    "B. Mengontrol, memperbarui, dan memantau status file gambar atau teks eksternal yang dimasukkan ke dokumen",
+                    "C. Membuat hyperlink ke situs web luar negeri",
+                    "D. Menghubungkan halaman satu dengan halaman lain secara otomatis",
+                    "E. Menggabungkan file InDesign dengan Photoshop"
+                ],
+                answer: 1,
+                explanation: "Panel Links mengelola file eksternal yang terhubung agar kualitas dan status file terpantau."
+            },
+            {
+                q: "Jika pada panel Links muncul ikon peringatan segitiga kuning dengan tanda seru (!), artinya...",
+                options: [
+                    "A. File gambar rusak total dan tidak bisa diperbaiki",
+                    "B. File gambar asli di komputer telah diubah, dipindah, atau dihapus lokasinya",
+                    "C. Gambar terlalu bagus resolusinya",
+                    "D. Komputer kekurangan daya baterai",
+                    "E. Format gambar tidak didukung sama sekali"
+                ],
+                answer: 1,
+                explanation: "Peringatan tanda seru kuning menandakan file sumber telah dimodifikasi atau hilang dari direktori asalnya."
+            },
+            {
+                q: "Perataan teks yang membuat setiap baris teks memiliki panjang yang sama dengan cara merenggangkan spasi antar kata (rata kiri-kanan) kecuali baris terakhir disebut...",
+                options: [
+                    "A. Align Left",
+                    "B. Center",
+                    "C. Align Right",
+                    "D. Justify (Left Aligned)",
+                    "E. Force Justify"
+                ],
+                answer: 3,
+                explanation: "Justify (Left Aligned) meratakan kedua sisi kiri dan kanan kecuali baris terakhir paragraf."
+            },
+            {
+                q: "Apa tujuan utama dari pembuatan 'Dummy' atau sketsa kasar sebelum melakukan layout digital di komputer?",
+                options: [
+                    "A. Menghabiskan waktu luang desainer",
+                    "B. Memvisualisasikan ide dasar tata letak, alur informasi, dan posisi elemen secara cepat",
+                    "C. Mengetahui harga jual majalah nantinya",
+                    "D. Menguji ketahanan baterai laptop",
+                    "E. Menentukan jenis komputer yang harus dibeli"
+                ],
+                answer: 1,
+                explanation: "Dummy atau thumbnail sketch membantu merencanakan tata letak visual sebelum eksekusi digital."
+            },
+            {
+                q: "Saat membuat brosur tiga lipat (tri-fold), pembagian panel lipatan kertas harus diperhatikan dengan teliti agar...",
+                options: [
+                    "A. Warnanya tidak luntur saat dicetak",
+                    "B. Posisi teks dan gambar tidak terlipat atau terpotong dengan salah ketika dilipat menjadi bentuk fisik",
+                    "C. Ukuran file PDF menjadi sangat kecil",
+                    "D. Jumlah halaman bertambah menjadi sepuluh",
+                    "E. Font otomatis berubah menjadi tebal"
+                ],
+                answer: 1,
+                explanation: "Perhitungan panel tri-fold penting agar lipatan brosur jatuh di area kosong yang tepat."
+            }
+        ];
+
+        // State Aplikasi
+        let currentStudent = { name: '', classGroup: '' };
+        let currentQuestionIndex = 0;
+        let studentAnswers = new Array(questionsData.length).fill(null);
+        let timerInterval = null;
+        let remainingSeconds = 60 * 60; // 60 menit
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('studentName').value.trim();
+            const classInput = document.getElementById('studentClass').value;
+
+            if (!nameInput || !classInput) return;
+
+            currentStudent.name = nameInput;
+            currentStudent.classGroup = classInput;
+
+            document.getElementById('displayName').innerText = currentStudent.name;
+            document.getElementById('displayClass').innerText = `Kelas: ${currentStudent.classGroup} | PPIM Ngruki`;
+
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+
+            initExam();
+        }
+
+        function initExam() {
+            renderPalette();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                let m = Math.floor(remainingSeconds / 60);
+                let s = remainingSeconds % 60;
+                document.getElementById('timerDisplay').innerText = 
+                    `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function renderPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            questionsData.forEach((_, idx) => {
+                const isAnswered = studentAnswers[idx] !== null;
+                const isCurrent = idx === currentQuestionIndex;
+
+                let btnClass = "w-9 h-9 rounded-xl text-xs font-bold transition flex items-center justify-center border ";
+                if (isCurrent) {
+                    btnClass += "border-emerald-700 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/30";
+                } else if (isAnswered) {
+                    btnClass += "bg-emerald-600 text-white border-emerald-600 shadow-sm";
+                } else {
+                    btnClass += "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100";
+                }
+
+                grid.innerHTML += `<button onclick="jumpToQuestion(${idx})" class="${btnClass}">${idx + 1}</button>`;
+            });
+        }
+
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questionsData[index];
+
+            document.getElementById('questionCounter').innerText = `Soal No. ${index + 1} dari ${questionsData.length}`;
+            document.getElementById('questionText').innerText = q.q;
+
+            const statusBadge = document.getElementById('answerStatusBadge');
+            if (studentAnswers[index] !== null) {
+                statusBadge.innerText = "Sudah dijawab";
+                statusBadge.className = "text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full";
+            } else {
+                statusBadge.innerText = "Belum dijawab";
+                statusBadge.className = "text-xs font-medium text-slate-400";
+            }
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, optIdx) => {
+                const isSelected = studentAnswers[index] === optIdx;
+                let optClass = "w-full text-left p-3.5 rounded-xl border text-sm transition flex items-center space-x-3 ";
+                
+                if (isSelected) {
+                    optClass += "border-emerald-600 bg-emerald-50/70 text-emerald-950 font-semibold shadow-sm";
+                } else {
+                    optClass += "border-slate-200 hover:border-emerald-200 hover:bg-slate-50 text-slate-700";
+                }
+
+                optionsContainer.innerHTML += `
+                    <button onclick="selectOption(${optIdx})" class="${optClass}">
+                        <div class="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'}">
+                            ${String.fromCharCode(65 + optIdx)}
+                        </div>
+                        <span class="flex-1">${opt.substring(3)}</span>
+                    </button>
+                `;
+            });
+
+            // Toggle button visibility
+            document.getElementById('prevBtn').style.visibility = index === 0 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').innerText = index === questionsData.length - 1 ? 'Selesai' : 'Selanjutnya';
+
+            renderPalette();
+        }
+
+        function selectOption(optIdx) {
+            studentAnswers[currentQuestionIndex] = optIdx;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questionsData.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                confirmSubmit();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        function confirmSubmit() {
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            document.getElementById('confirmModal').classList.add('hidden');
+            document.getElementById('examScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+
+            let correctCount = 0;
+            questionsData.forEach((q, idx) => {
+                if (studentAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const finalScore = Math.round((correctCount / questionsData.length) * 100);
+
+            document.getElementById('resStudentInfo').innerText = `${currentStudent.name} (${currentStudent.classGroup})`;
+            document.getElementById('resScore').innerText = finalScore;
+            document.getElementById('resStats').innerText = `${correctCount} Benar dari ${questionsData.length}`;
+
+            // Render Review
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+
+            questionsData.forEach((q, idx) => {
+                const userAns = studentAnswers[idx];
+                const isCorrect = userAns === q.answer;
+                const userAnsText = userAns !== null ? q.options[userAns] : "Tidak dijawab";
+                const correctAnsText = q.options[q.answer];
+
+                reviewContainer.innerHTML += `
+                    <div class="p-4 rounded-2xl border ${isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'} space-y-2">
+                        <div class="flex items-start justify-between">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-md ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                                Soal ${idx + 1} - ${isCorrect ? 'Benar' : 'Salah'}
+                            </span>
+                        </div>
+                        <p class="font-semibold text-slate-800 text-sm">${q.q}</p>
+                        <div class="text-xs space-y-1 pt-1">
+                            <p class="${isCorrect ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-semibold'}">Jawaban Anda: ${userAnsText}</p>
+                            ${!isCorrect ? `<p class="text-emerald-800 font-semibold">Kunci Jawaban: ${correctAnsText}</p>` : ''}
+                        </div>
+                        <div class="mt-2 p-3 bg-white/80 rounded-xl border border-slate-200/60 text-xs text-slate-600 leading-relaxed">
+                            <span class="font-bold text-slate-700 block mb-0.5">Pembahasan:</span>
+                            ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
 
